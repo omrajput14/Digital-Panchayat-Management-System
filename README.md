@@ -111,6 +111,4 @@ java --enable-native-access=ALL-UNNAMED \
 - **Pipe-delimited storage** — attendees and action items stored as `"Ram|Shyam|Geeta"` to avoid extra join tables
 - **No external PDF library** — uses Java's built-in `java.awt.print.PrinterJob`; macOS "Save as PDF" covers the use case
 
----
 
-Made for Gram Panchayat office staff
