@@ -3,6 +3,7 @@ package panchayat.view;
 import panchayat.dao.ComplaintDAO;
 import panchayat.model.Complaint;
 import panchayat.util.ReportExporter;
+import panchayat.util.PdfExporter;
 
 import javax.swing.*;
 import javax.swing.border.*;
@@ -220,14 +221,17 @@ public class ComplaintPanel extends JPanel {
         JButton btnDelete  = actionButton("🗑 Delete",              ACCENT_RED);
         JButton btnCsv     = actionButton("📥 Export CSV",          new Color(99, 102, 241));
         JButton btnPrint   = actionButton("🖨 Print Report",        new Color(245, 158, 11));
+        JButton btnPdf     = actionButton("📄 Save as PDF",         new Color(220, 38, 38));
 
         btnSave.addActionListener(   e -> registerComplaint());
         btnUpdate.addActionListener( e -> updateSelectedStatus());
         btnDelete.addActionListener( e -> deleteSelected());
         btnCsv.addActionListener(    e -> ReportExporter.exportTableToCSV(table, this));
         btnPrint.addActionListener(  e -> printComplaintsReport());
+        btnPdf.addActionListener(    e -> savePdfReport());
 
         btnPanel.add(btnDelete);
+        btnPanel.add(btnPdf);
         btnPanel.add(btnPrint);
         btnPanel.add(btnCsv);
         btnPanel.add(btnUpdate);
@@ -331,6 +335,33 @@ public class ComplaintPanel extends JPanel {
 
     private String truncate(String s, int max) {
         return s.length() > max ? s.substring(0, max - 1) + "…" : s;
+    }
+
+    /** Build report body text (shared by print and PDF). */
+    private String buildReportBody() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SECTION: Citizen Complaints\n\n");
+        sb.append(String.format("%-5s %-20s %-8s %-14s %-12s %-12s%n",
+            "ID","Citizen Name","Ward","Category","Date Filed","Status"));
+        sb.append("─".repeat(75)).append("\n");
+        for (int r = 0; r < tableModel.getRowCount(); r++) {
+            sb.append(String.format("%-5s %-20s %-8s %-14s %-12s %-12s%n",
+                tableModel.getValueAt(r,0), truncate(tableModel.getValueAt(r,1).toString(),20),
+                tableModel.getValueAt(r,2), tableModel.getValueAt(r,3),
+                tableModel.getValueAt(r,4), tableModel.getValueAt(r,5)));
+        }
+        sb.append("\nTotal records: ").append(tableModel.getRowCount());
+        return sb.toString();
+    }
+
+    /** Save report directly as a PDF file (no print dialog). */
+    private void savePdfReport() {
+        if (tableModel.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "No complaint data to export.",
+                "Empty Table", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        PdfExporter.savePdf("Citizen Complaints Report", buildReportBody(), this);
     }
 
     /** Update the status of the selected table row. */

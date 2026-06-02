@@ -3,6 +3,7 @@ package panchayat.view;
 import panchayat.dao.IssueDAO;
 import panchayat.model.Issue;
 import panchayat.util.ReportExporter;
+import panchayat.util.PdfExporter;
 
 import javax.swing.*;
 import javax.swing.border.*;
@@ -241,14 +242,17 @@ public class IssuePanel extends JPanel {
         JButton btnDelete = actionButton("🗑 Delete",          ACCENT_RED);
         JButton btnCsv    = actionButton("📥 Export CSV",      new Color(99, 102, 241));
         JButton btnPrint  = actionButton("🖨 Print Report",    new Color(245, 158, 11));
+        JButton btnPdf    = actionButton("📄 Save as PDF",     new Color(220, 38, 38));
 
         btnSave.addActionListener(   e -> logIssue());
         btnUpdate.addActionListener( e -> updateSelectedStatus());
         btnDelete.addActionListener( e -> deleteSelected());
         btnCsv.addActionListener(    e -> ReportExporter.exportTableToCSV(table, this));
         btnPrint.addActionListener(  e -> printIssuesReport());
+        btnPdf.addActionListener(    e -> savePdfReport());
 
         btnRow.add(btnDelete);
+        btnRow.add(btnPdf);
         btnRow.add(btnPrint);
         btnRow.add(btnCsv);
         btnRow.add(btnUpdate);
@@ -335,6 +339,32 @@ public class IssuePanel extends JPanel {
 
     private String truncate(String s, int max) {
         return s.length() > max ? s.substring(0, max - 1) + "…" : s;
+    }
+
+    private String buildReportBody() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SECTION: Infrastructure Issues\n\n");
+        sb.append(String.format("%-5s %-18s %-8s %-12s %-8s %-12s %-10s%n",
+            "ID","Title","Ward","Type","Severity","Reported","Status"));
+        sb.append("─".repeat(75)).append("\n");
+        for (int r = 0; r < tableModel.getRowCount(); r++) {
+            sb.append(String.format("%-5s %-18s %-8s %-12s %-8s %-12s %-10s%n",
+                tableModel.getValueAt(r,0), truncate(tableModel.getValueAt(r,1).toString(),18),
+                tableModel.getValueAt(r,2), tableModel.getValueAt(r,3),
+                tableModel.getValueAt(r,4), tableModel.getValueAt(r,6),
+                tableModel.getValueAt(r,8)));
+        }
+        sb.append("\nTotal records: ").append(tableModel.getRowCount());
+        return sb.toString();
+    }
+
+    private void savePdfReport() {
+        if (tableModel.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "No issue data to export.",
+                "Empty Table", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        PdfExporter.savePdf("Infrastructure Issues Report", buildReportBody(), this);
     }
 
     private void updateSelectedStatus() {

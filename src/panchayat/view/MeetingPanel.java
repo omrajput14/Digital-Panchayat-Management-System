@@ -3,6 +3,7 @@ package panchayat.view;
 import panchayat.dao.MeetingDAO;
 import panchayat.model.Meeting;
 import panchayat.util.ReportExporter;
+import panchayat.util.PdfExporter;
 
 import javax.swing.*;
 import javax.swing.border.*;
@@ -249,17 +250,20 @@ public class MeetingPanel extends JPanel {
         JPanel btnRow = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         btnRow.setBackground(BG_DARK);
 
-        JButton btnSave   = actionButton("💾 Save Meeting",   ACCENT);
+        JButton btnSave   = actionButton("💾 Save Meeting",    ACCENT);
         JButton btnDelete = actionButton("🗑 Delete Selected", ACCENT_RED);
-        JButton btnCsv    = actionButton("📥 Export CSV",      new Color(99, 102, 241));
-        JButton btnPrint  = actionButton("🖨 Print Report",    new Color(245, 158, 11));
+        JButton btnCsv    = actionButton("📥 Export CSV",       new Color(99, 102, 241));
+        JButton btnPrint  = actionButton("🖨 Print Report",     new Color(245, 158, 11));
+        JButton btnPdf    = actionButton("📄 Save as PDF",      new Color(220, 38, 38));
 
         btnSave.addActionListener(   e -> saveMeeting());
         btnDelete.addActionListener( e -> deleteSelected());
         btnCsv.addActionListener(    e -> ReportExporter.exportTableToCSV(table, this));
         btnPrint.addActionListener(  e -> printMeetingsReport());
+        btnPdf.addActionListener(    e -> savePdfReport());
 
         btnRow.add(btnDelete);
+        btnRow.add(btnPdf);
         btnRow.add(btnPrint);
         btnRow.add(btnCsv);
         btnRow.add(btnSave);
@@ -327,6 +331,31 @@ public class MeetingPanel extends JPanel {
 
     private String truncate(String s, int max) {
         return s.length() > max ? s.substring(0, max - 1) + "…" : s;
+    }
+
+    private String buildReportBody() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SECTION: Meeting Records\n\n");
+        sb.append(String.format("%-5s %-16s %-12s %-40s%n",
+            "ID","Type","Date","Agenda (preview)"));
+        sb.append("─".repeat(75)).append("\n");
+        for (int r = 0; r < tableModel.getRowCount(); r++) {
+            sb.append(String.format("%-5s %-16s %-12s %-40s%n",
+                tableModel.getValueAt(r,0), tableModel.getValueAt(r,1),
+                tableModel.getValueAt(r,2),
+                truncate(tableModel.getValueAt(r,4).toString(), 40)));
+        }
+        sb.append("\nTotal meetings: ").append(tableModel.getRowCount());
+        return sb.toString();
+    }
+
+    private void savePdfReport() {
+        if (tableModel.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "No meeting data to export.",
+                "Empty Table", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        PdfExporter.savePdf("Meeting Records Report", buildReportBody(), this);
     }
 
     private void deleteSelected() {
