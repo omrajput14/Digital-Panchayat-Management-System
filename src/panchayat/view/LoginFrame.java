@@ -50,9 +50,9 @@ public class LoginFrame extends JFrame {
         btnGov.addActionListener(e -> {
             // Simple password prompt for gov login
             JPasswordField pwd = new JPasswordField(10);
-            int action = JOptionPane.showConfirmDialog(this, pwd, "Enter Government Password (hint: admin)", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            int action = JOptionPane.showConfirmDialog(this, pwd, "Enter Government Password", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (action == JOptionPane.OK_OPTION) {
-                if (new String(pwd.getPassword()).equals("admin")) {
+                if (new String(pwd.getPassword()).equals("WADE")) {
                     launchMain(true);
                 } else {
                     JOptionPane.showMessageDialog(this, "Incorrect password!", "Authentication Failed", JOptionPane.ERROR_MESSAGE);
