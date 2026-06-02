@@ -1,39 +1,92 @@
-# Digital Panchayat Management System
+# 🏛 Digital Panchayat Management System
 
-A Java Swing desktop application for local Panchayat office staff to manage day-to-day governance tasks.
+<p align="center">
+  <img src="images/gov1.png" width="100%" alt="Digital Panchayat Management System"/>
+</p>
 
-## Features
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-17%2B-orange?style=for-the-badge&logo=java" />
+  <img src="https://img.shields.io/badge/UI-Java%20Swing-blue?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/DB-SQLite-lightgrey?style=for-the-badge&logo=sqlite" />
+  <img src="https://img.shields.io/badge/Platform-macOS%20%7C%20Windows%20%7C%20Linux-green?style=for-the-badge" />
+</p>
+
+> A modern, dark-themed Java Swing desktop application for local Panchayat office staff to manage day-to-day governance — complaints, infrastructure issues, meetings, and public services — all in one place.
+
+---
+
+## 🔐 Login System
+
+The application features a **dual-portal login** — one for citizens and one for government staff.
+
+| Portal | Access | Features |
+|--------|--------|----------|
+| 👥 **Public / Citizen** | Open access | Submit complaints, view dashboard |
+| 🏛 **Government** | Password protected (`WADE`) | Full access — manage complaints, issues, meetings, export reports |
+
+> The government password dialog features a **👁 show/hide toggle** so you can see what you're typing.
+
+### 🏠 Citizen Portal
+<p align="center">
+  <img src="images/city1.png" width="48%" />
+  <img src="images/city2.png" width="48%" />
+</p>
+
+### ⚙️ Government Portal
+<p align="center">
+  <img src="images/gov1.png" width="48%" />
+  <img src="images/gov 2.png" width="48%" />
+</p>
+<p align="center">
+  <img src="images/gov3.png" width="48%" />
+  <img src="images/gov4.png" width="48%" />
+</p>
+
+---
+
+## ✨ Features
 
 ### 📊 Summary Dashboard
 - Live statistics: open complaints, issues by severity, meetings this month, pending action items
 - One-click **Print Full Report** → saves as PDF via system print dialog
 
 ### 🏠 Citizen Complaint Portal
-- Register complaints with citizen name, ward, category, description, status
+- Register complaints with citizen name, ward, category, description, and status
 - Filter by status and ward number
-- Update status (Pending → In Progress → Resolved)
-- **Export CSV** and **Print Report** buttons
+- Update status: `Pending → In Progress → Resolved`
+- **Export CSV**, **Print Report**, and **Save as PDF**
 - Red-border validation for empty or incorrectly formatted fields
 
-### 🔧 Infrastructure Issue Tracker
-- Log issues with type, severity (Low / Medium / High), assigned officer, resolution date
+### 🔧 Infrastructure Issue Tracker *(Gov only)*
+- Log issues with type, severity (Low / Medium / High), assigned officer, and resolution date
 - **Overdue rows highlighted in red** automatically
 - Past-date warning confirmation dialog
-- Status updates and full CRUD
+- Full CRUD with status updates
 
-### 📅 Meeting Records Manager
-- Record Gram Sabha, Ward Committee, Emergency meetings
-- Attendees and action items entered one-per-line, stored efficiently
+### 📅 Meeting Records Manager *(Gov only)*
+- Record Gram Sabha, Ward Committee, and Emergency meetings
+- Attendees and action items entered one-per-line
+- **📱 SMS Simulation** — automatically notifies all employees when a meeting is saved
 - Keyword search across type, agenda, and attendees
 - Click any row to see full meeting details in the detail panel
 
-## Tech Stack
-- **Language**: Java 17+
-- **UI**: Java Swing (Nimbus L&F with custom dark theme)
-- **Database**: SQLite via JDBC (no server required)
-- **Build**: Shell scripts (no Maven/Gradle needed)
+### 🔔 SMS Notification System
+When a government user saves a new meeting, an **SMS alert is simulated** to all government employees with the meeting details and date.
 
-## Project Structure
+---
+
+## 🛠 Tech Stack
+
+| Component | Technology |
+|-----------|-----------|
+| Language  | Java 17+  |
+| UI Framework | Java Swing (Nimbus L&F + custom dark theme) |
+| Database  | SQLite via JDBC (no server required) |
+| Build     | Shell scripts (no Maven/Gradle needed) |
+
+---
+
+## 📁 Project Structure
 
 ```
 PanchayatSystem/
@@ -50,64 +103,83 @@ PanchayatSystem/
 │   │   ├── IssueDAO.java
 │   │   └── MeetingDAO.java
 │   ├── view/
-│   │   ├── MainFrame.java          ← Root JFrame with tabs + sidebar
+│   │   ├── LoginFrame.java         ← Dual login (Public / Government)
+│   │   ├── MainFrame.java          ← Root JFrame with clickable sidebar + tabs
 │   │   ├── DashboardPanel.java
 │   │   ├── ComplaintPanel.java
 │   │   ├── IssuePanel.java
 │   │   └── MeetingPanel.java
 │   └── util/
-│       └── ReportExporter.java     ← CSV export + PDF/Print utility
+│       ├── ReportExporter.java     ← CSV export + PDF/Print utility
+│       ├── PdfExporter.java        ← PDF saving
+│       └── SmsService.java         ← Mock SMS notification service
+├── images/                         ← Screenshots
 ├── lib/
-│   └── sqlite-jdbc-3.36.0.3.jar   ← SQLite JDBC driver
+│   └── sqlite-jdbc-3.36.0.3.jar
 ├── build.sh                        ← Compile script
 ├── run.sh                          ← Launch script
 └── README.md
 ```
 
-## How to Run
+---
+
+## 🚀 How to Run
 
 ### Prerequisites
-- Java 17 or later (`java -version`)
+- Java 17 or later — check with `java -version`
 
-### Step 1 — Compile
+### Option 1 — Using scripts (recommended)
 ```bash
 cd PanchayatSystem
 chmod +x build.sh run.sh
-./build.sh
+./build.sh   # compile
+./run.sh     # launch
 ```
 
-### Step 2 — Run
-```bash
-./run.sh
-```
-
-The SQLite database (`panchayat.db`) is created automatically on first launch.
-
-### Manual compile & run
+### Option 2 — Manual
 ```bash
 # Compile
-find src -name "*.java" | xargs javac -cp "lib/sqlite-jdbc-3.36.0.3.jar" -d out
+javac -cp "lib/*" -sourcepath src -d out src/panchayat/Main.java
 
 # Run
-java --enable-native-access=ALL-UNNAMED \
-     -cp "out:lib/sqlite-jdbc-3.36.0.3.jar" \
-     panchayat.Main
+java -cp "out:lib/*" panchayat.Main
 ```
 
 > **Windows**: Replace `:` with `;` in the classpath.
 
-## Export & Print
+The SQLite database (`panchayat.db`) is created automatically on first launch.
 
-| Button | Where | What it does |
-|--------|-------|--------------|
-| 📥 Export CSV | Complaints / Issues / Meetings | Saves current table to a `.csv` file |
-| 🖨 Print Report | All modules + Dashboard | Opens system print dialog (macOS: Save as PDF) |
+---
 
-## Design Decisions
+## 📤 Export & Reports
+
+| Button | Module | Action |
+|--------|--------|--------|
+| 📥 Export CSV | Complaints / Issues / Meetings | Saves current table to `.csv` |
+| 🖨 Print Report | All modules + Dashboard | Opens system print dialog |
+| 📄 Save as PDF | All modules | Saves formatted PDF report |
+
+---
+
+## 🔑 Login Credentials
+
+| Role | Password |
+|------|----------|
+| 👥 Public Citizen | No password needed |
+| 🏛 Government Staff | `WADE` |
+
+---
+
+## 🏗 Design Decisions
 
 - **Singleton DB connection** — avoids SQLite file-lock conflicts on a single-user desktop
 - **DAO pattern** — all SQL lives in DAO classes; views stay clean
-- **No WAL mode** — default DELETE journal avoids lock conflicts on fresh DB creation
-- **Pipe-delimited storage** — attendees and action items stored as `"Ram|Shyam|Geeta"` to avoid extra join tables
-- **No external PDF library** — uses Java's built-in `java.awt.print.PrinterJob`; macOS "Save as PDF" covers the use case
+- **Pipe-delimited storage** — attendees stored as `"Ram|Shyam|Geeta"` to avoid extra join tables
+- **No external PDF library** — uses Java's built-in `PrinterJob`; macOS "Save as PDF" covers the use case
+- **Role-based UI** — Public portal hides admin controls; Government portal shows full management suite
 
+---
+
+## 👤 Author
+
+**Om Rajput** — [@omrajput14](https://github.com/omrajput14)
