@@ -300,6 +300,10 @@ public class MeetingPanel extends JPanel {
             loadData(null);
             JOptionPane.showMessageDialog(this, "✅  Meeting #" + id + " saved successfully!",
                 "Saved", JOptionPane.INFORMATION_MESSAGE);
+                
+            // Send SMS notification
+            panchayat.util.SmsService.sendMeetingNotification(type, date, this);
+            
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Database error: " + ex.getMessage(),
                 "Error", JOptionPane.ERROR_MESSAGE);
