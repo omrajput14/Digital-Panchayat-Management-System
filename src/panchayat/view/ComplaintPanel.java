@@ -60,7 +60,10 @@ public class ComplaintPanel extends JPanel {
         "ID", "Citizen Name", "Ward", "Category", "Date Filed", "Status"
     };
 
-    public ComplaintPanel() {
+    private boolean isGov;
+
+    public ComplaintPanel(boolean isGov) {
+        this.isGov = isGov;
         setLayout(new BorderLayout(0, 12));
         setBackground(BG_DARK);
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -189,6 +192,10 @@ public class ComplaintPanel extends JPanel {
         cbStatus = new JComboBox<>(new String[]{
             Complaint.STATUS_PENDING, Complaint.STATUS_IN_PROGRESS, Complaint.STATUS_RESOLVED});
         styleCombo(cbStatus);
+        
+        if (!isGov) {
+            cbStatus.setEnabled(false); // Public can only submit as Pending
+        }
 
         addFormRow(form, gbc, 1,
             "Citizen Name*", tfCitizenName,
@@ -230,11 +237,13 @@ public class ComplaintPanel extends JPanel {
         btnPrint.addActionListener(  e -> printComplaintsReport());
         btnPdf.addActionListener(    e -> savePdfReport());
 
-        btnPanel.add(btnDelete);
-        btnPanel.add(btnPdf);
-        btnPanel.add(btnPrint);
-        btnPanel.add(btnCsv);
-        btnPanel.add(btnUpdate);
+        if (isGov) {
+            btnPanel.add(btnDelete);
+            btnPanel.add(btnPdf);
+            btnPanel.add(btnPrint);
+            btnPanel.add(btnCsv);
+            btnPanel.add(btnUpdate);
+        }
         btnPanel.add(btnSave);
         wrapper.add(btnPanel, BorderLayout.SOUTH);
 

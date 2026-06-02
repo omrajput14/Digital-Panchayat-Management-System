@@ -251,7 +251,8 @@ public class DashboardPanel extends JPanel {
     }
 
     /**
-     * Assembles a consolidated text report of all live dashboard statistics
+     * Assembles a consolidated text report of all live dashboard statisticsrun the
+     * code base
      * and sends it to the system print dialog (macOS: Save as PDF available).
      */
     private void printFullReport() {

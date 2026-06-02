@@ -43,7 +43,7 @@ public class Main {
         }
 
         // Step 3: Launch UI on the EDT
-        SwingUtilities.invokeLater(MainFrame::new);
+        SwingUtilities.invokeLater(() -> new panchayat.view.LoginFrame().setVisible(true));
     }
 
     private static void applyLookAndFeel() {

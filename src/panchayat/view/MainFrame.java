@@ -19,6 +19,7 @@ import java.awt.event.*;
 public class MainFrame extends JFrame {
 
     private DashboardPanel dashboardPanel;
+    private boolean isGov;
 
     // Sidebar navigation constants
     private static final Color BG_DARK    = new Color(15, 23, 42);
@@ -27,8 +28,9 @@ public class MainFrame extends JFrame {
     private static final Color TEXT_WHITE = new Color(248, 250, 252);
     private static final Color TEXT_MUTED = new Color(100, 116, 139);
 
-    public MainFrame() {
-        super("Digital Panchayat Management System");
+    public MainFrame(boolean isGov) {
+        super("Digital Panchayat Management System" + (isGov ? " - Government Portal" : " - Public Portal"));
+        this.isGov = isGov;
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setMinimumSize(new Dimension(1100, 700));
         setPreferredSize(new Dimension(1280, 800));
@@ -129,7 +131,10 @@ public class MainFrame extends JFrame {
         sidebar.add(Box.createVerticalStrut(20));
 
         // Nav menu labels (decorative — actual navigation is via tabs)
-        String[] navItems = {"📊 Dashboard", "🏠 Complaints", "🔧 Issues", "📅 Meetings"};
+        String[] navItems = isGov ? 
+            new String[]{"📊 Dashboard", "🏠 Complaints", "🔧 Issues", "📅 Meetings"} : 
+            new String[]{"📊 Dashboard", "🏠 Complaints"};
+            
         for (String item : navItems) {
             JLabel nav = new JLabel(item);
             nav.setFont(new Font("SansSerif", Font.PLAIN, 13));
@@ -176,20 +181,22 @@ public class MainFrame extends JFrame {
 
         // Build panels
         dashboardPanel      = new DashboardPanel();
-        ComplaintPanel cpanel = new ComplaintPanel();
-        IssuePanel     ipanel = new IssuePanel();
-        MeetingPanel   mpanel = new MeetingPanel();
+        ComplaintPanel cpanel = new ComplaintPanel(isGov);
 
         tabs.addTab("📊  Dashboard",   dashboardPanel);
         tabs.addTab("🏠  Complaints",  cpanel);
-        tabs.addTab("🔧  Issues",      ipanel);
-        tabs.addTab("📅  Meetings",    mpanel);
-
-        // Set tab tooltips for non-technical staff
         tabs.setToolTipTextAt(0, "Summary Dashboard — overview statistics");
-        tabs.setToolTipTextAt(1, "Citizen Complaint Portal — register and manage complaints");
-        tabs.setToolTipTextAt(2, "Infrastructure Issue Tracker — log and monitor field issues");
-        tabs.setToolTipTextAt(3, "Meeting Records Manager — record and search Panchayat meetings");
+        tabs.setToolTipTextAt(1, "Citizen Complaint Portal — register and view complaints");
+
+        if (isGov) {
+            IssuePanel     ipanel = new IssuePanel();
+            MeetingPanel   mpanel = new MeetingPanel();
+            tabs.addTab("🔧  Issues",      ipanel);
+            tabs.addTab("📅  Meetings",    mpanel);
+            tabs.setToolTipTextAt(1, "Citizen Complaint Portal — register and manage complaints");
+            tabs.setToolTipTextAt(2, "Infrastructure Issue Tracker — log and monitor field issues");
+            tabs.setToolTipTextAt(3, "Meeting Records Manager — record and search Panchayat meetings");
+        }
 
         return tabs;
     }
