@@ -1,0 +1,23 @@
+# Compiled Java class files
+out/
+
+# SQLite database (runtime data — not source)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# macOS system files
+.DS_Store
+*.localized
+
+# IDE project files
+.idea/
+*.iml
+.vscode/
+*.classpath
+*.project
+.settings/
+
+# Logs
+*.log
