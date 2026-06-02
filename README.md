@@ -113,4 +113,4 @@ java --enable-native-access=ALL-UNNAMED \
 
 ---
 
-Made with ❤️ for Gram Panchayat office staff
+Made for Gram Panchayat office staff
