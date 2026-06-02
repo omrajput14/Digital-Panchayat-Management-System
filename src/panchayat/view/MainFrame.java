@@ -145,6 +145,47 @@ public class MainFrame extends JFrame {
 
         sidebar.add(Box.createVerticalGlue());
 
+        // ── Logout button ─────────────────────────────────────────────────
+        JSeparator sep2 = new JSeparator();
+        sep2.setForeground(new Color(51, 65, 85));
+        sep2.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
+        sidebar.add(sep2);
+        sidebar.add(Box.createVerticalStrut(12));
+
+        JButton logoutBtn = new JButton("⏻  Logout") {
+            final Color bg = new Color(127, 29, 29);
+            @Override protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(getModel().isRollover() ? new Color(185, 28, 28) :
+                            getModel().isPressed()  ? new Color(220, 38, 38) : bg);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        logoutBtn.setFont(new Font("SansSerif", Font.BOLD, 13));
+        logoutBtn.setForeground(new Color(252, 165, 165));
+        logoutBtn.setFocusPainted(false);
+        logoutBtn.setBorderPainted(false);
+        logoutBtn.setContentAreaFilled(false);
+        logoutBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        logoutBtn.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
+        logoutBtn.setBorder(BorderFactory.createEmptyBorder(0, 16, 0, 8));
+        logoutBtn.setHorizontalAlignment(SwingConstants.LEFT);
+        logoutBtn.setAlignmentX(LEFT_ALIGNMENT);
+        logoutBtn.addActionListener(e -> {
+            int res = JOptionPane.showConfirmDialog(MainFrame.this,
+                "Are you sure you want to logout?",
+                "Logout", JOptionPane.YES_NO_OPTION);
+            if (res == JOptionPane.YES_OPTION) {
+                dispose();
+                SwingUtilities.invokeLater(() -> new LoginFrame().setVisible(true));
+            }
+        });
+        sidebar.add(logoutBtn);
+        sidebar.add(Box.createVerticalStrut(14));
+
         // Footer
         JLabel footer = new JLabel("<html><center>Gram Panchayat<br>Office System  •  v1.0</center></html>");
         footer.setFont(new Font("SansSerif", Font.PLAIN, 10));
