@@ -1,7 +1,7 @@
 # 🏛 Digital Panchayat Management System
 
 <p align="center">
-  <img src="images/gov1.png" width="100%" alt="Digital Panchayat Management System"/>
+  <img src="images/panchayat-overview.png" width="100%" alt="Project Overview"/>
 </p>
 
 <p align="center">
@@ -11,7 +11,17 @@
   <img src="https://img.shields.io/badge/Platform-macOS%20%7C%20Windows%20%7C%20Linux-green?style=for-the-badge" />
 </p>
 
-> A modern, dark-themed Java Swing desktop application for local Panchayat office staff to manage day-to-day governance — complaints, infrastructure issues, meetings, and public services — all in one place.
+> A modern digital governance platform designed to transform Panchayat operations through complaint management, infrastructure tracking, meeting management, and data-driven decision making.
+
+---
+
+## 🎯 Project Overview
+
+This infographic summarizes the real-world problem, proposed solution, technology stack, and future roadmap of the Digital Panchayat Management System.
+
+<p align="center">
+  <img src="images/panchayat-overview.png" width="100%" alt="Digital Panchayat Infographic"/>
+</p>
 
 ---
 
