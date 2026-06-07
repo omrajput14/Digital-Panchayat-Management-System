@@ -15,16 +15,6 @@
 
 ---
 
-## 🎯 Project Overview
-
-This infographic summarizes the real-world problem, proposed solution, technology stack, and future roadmap of the Digital Panchayat Management System.
-
-<p align="center">
-  <img src="images/panchayat-overview.png" width="100%" alt="Digital Panchayat Infographic"/>
-</p>
-
----
-
 ## 📺 Demo Video
 
 <p align="center">
