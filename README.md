@@ -15,13 +15,20 @@
 
 ---
 
-## 📺 Demo Video
+## 📺 Project Showcase
 
 <p align="center">
-  <video src="demo%20video/Architecting_Civic_Tech__Engineering_the_Digital_Panchayat.mp4" width="100%" controls></video>
+  <a href="https://youtu.be/OV2rDy1YkEY">
+    <img src="images/youtube-thumbnail.png" width="100%" alt="Watch Project Demo">
+  </a>
 </p>
 
-*If the video player doesn't load, you can watch/download it directly [here](demo%20video/Architecting_Civic_Tech__Engineering_the_Digital_Panchayat.mp4).*
+<p align="center">
+  🎥 <strong>Watch the full project demonstration on YouTube</strong><br>
+  <a href="https://youtu.be/OV2rDy1YkEY">https://youtu.be/OV2rDy1YkEY</a>
+</p>
+
+> 💡 **Prefer direct download?** You can also watch or download the offline video file [here](demo%20video/Architecting_Civic_Tech__Engineering_the_Digital_Panchayat.mp4).
 
 ---
 
